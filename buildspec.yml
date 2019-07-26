@@ -1,0 +1,23 @@
+version: 0.1
+phases:
+  pre_build:
+    commands:
+      - echo Installing dependencies...
+      - npm install
+  build:
+    commands:
+      - echo Building package... `data`
+      - npm run build
+  post_build:
+    commands:
+      - echo Copying built assets to S3 for deployment...
+      - aws s3 cp --recursive --acl public-read ./build s3://${AssetBucket}/
+      - >
+        aws s3 cp --acl public-read
+        --cache-control="max-age=0, no-cache, no-store, must-revalidate"
+        ./build/index.html s3://${AssetBucket}/
+    
+artifacts:
+  files:
+    - '**/*'
+  base-directory: build
