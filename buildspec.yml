@@ -14,11 +14,11 @@ phases:
   post_build:
     commands:
       - echo Copying built assets to S3 for deployment...
-      - aws s3 cp --recursive --acl public-read ./build s3://${AssetBucket}/
+      - aws s3 cp --recursive --acl public-read ./build s3://$(ASSET_BUCKET)/
       - >
         aws s3 cp --acl public-read
         --cache-control="max-age=0, no-cache, no-store, must-revalidate"
-        ./build/index.html s3://${AssetBucket}/
+        ./build/index.html s3://$(ASSET_BUCKET)/
     
 artifacts:
   files:
